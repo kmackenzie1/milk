@@ -8,6 +8,7 @@ let words = [
 let usedWords = [];
 let currentWords = { 0: '', 1: '' };
 let sharedStats = {};
+let savePromise = Promise.resolve();
 const JSONBIN_BIN_ID = '698e8108d0ea881f40b63f14';
 const JSONBIN_API_KEY = '$2a$10$5nyS7Af5XT/rv29R9G19W.Zr6AGL7neriCUyKiX7uahEy72EAKQZO';
 const JSONBIN_URL = `https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`;
@@ -29,20 +30,25 @@ async function fetchStats() {
 }
 
 function recordSelection(animal) {
-    const stats = getStats();
-    stats[animal] = (stats[animal] || 0) + 1;
-    sharedStats = stats;
-    
-    fetch(JSONBIN_URL, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-Master-Key': JSONBIN_API_KEY
-        },
-        body: JSON.stringify({ stats: stats })
-    }).catch(error => {
-        console.error('Error recording selection:', error);
+    savePromise = savePromise.then(async () => {
+        await fetchStats();
+        const stats = getStats();
+        stats[animal] = (stats[animal] || 0) + 1;
+        sharedStats = stats;
+        try {
+            await fetch(JSONBIN_URL, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Master-Key': JSONBIN_API_KEY
+                },
+                body: JSON.stringify({ stats: stats })
+            });
+        } catch (error) {
+            console.error('Error recording selection:', error);
+        }
     });
+    return savePromise;
 }
 
 function getStats() {
@@ -89,9 +95,6 @@ function updateWords() {
 
 function selectImage(index) {
     const selectedAnimal = currentWords[index];
-    if (selectedAnimal) {
-        recordSelection(selectedAnimal);
-    }
     
     document.querySelectorAll('.image-card').forEach(card => {
         card.classList.remove('selected');
@@ -104,6 +107,10 @@ function selectImage(index) {
             card.classList.remove('selected');
         });
     }, 500);
+    
+    if (selectedAnimal) {
+        recordSelection(selectedAnimal);
+    }
 }
 
 function initializeImages() {
