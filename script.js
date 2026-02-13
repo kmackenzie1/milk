@@ -8,6 +8,7 @@ let words = [
 let usedWords = [];
 let currentWords = { 0: '', 1: '' };
 let sharedStats = {};
+let hasFetchedStats = false;
 const JSONBIN_BIN_ID = '698e8108d0ea881f40b63f14';
 const JSONBIN_API_KEY = '$2a$10$5nyS7Af5XT/rv29R9G19W.Zr6AGL7neriCUyKiX7uahEy72EAKQZO';
 const JSONBIN_URL = `https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`;
@@ -22,6 +23,7 @@ async function fetchStats() {
         if (response.ok) {
             const data = await response.json();
             sharedStats = data.record?.stats || {};
+            hasFetchedStats = true;
         }
     } catch (error) {
         console.error('Error fetching stats:', error);
@@ -122,9 +124,12 @@ function toggleResults() {
 
 async function displayResults() {
     const resultsContent = document.getElementById('results-content');
-    resultsContent.innerHTML = '<p>Loading statistics...</p>';
-    
-    await fetchStats();
+
+    if (!hasFetchedStats) {
+        resultsContent.innerHTML = '<p>Loading statistics...</p>';
+        await fetchStats();
+    }
+
     const percentages = getPercentages();
     const stats = getStats();
     const total = Object.values(stats).reduce((sum, count) => sum + count, 0);
