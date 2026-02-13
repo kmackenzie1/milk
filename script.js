@@ -3,7 +3,7 @@ let words = [
   "otter", "bear", "elephant", "rabbit", "pig", "panda", "lion", "leopard",
   "wolf", "chimpanzee", "fox", "seal", "guinea pig", "whale", "dog", "lemur",
   "monkey", "anteater", "dolphin", "cat", "pangolin", "hyena", "platypus",
-  "human", "mole", "bat", "mouse", "weasel", "rat"
+  "sloth", "mole", "bat", "mouse", "weasel", "rat"
 ];
 let usedWords = [];
 let currentWords = { 0: '', 1: '' };
