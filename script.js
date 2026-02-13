@@ -7,20 +7,48 @@ let words = [
 ];
 let usedWords = [];
 let currentWords = { 0: '', 1: '' };
+let sharedStats = {};
+const JSONBIN_BIN_ID = '698e8108d0ea881f40b63f14';
+const JSONBIN_API_KEY = '$2a$10$5nyS7Af5XT/rv29R9G19W.Zr6AGL7neriCUyKiX7uahEy72EAKQZO';
+const JSONBIN_URL = `https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`;
 
-function getStats() {
-    const stats = localStorage.getItem('milkGameStats');
-    return stats ? JSON.parse(stats) : {};
+async function fetchStats() {
+    try {
+        const response = await fetch(JSONBIN_URL + '/latest', {
+            headers: {
+                'X-Master-Key': JSONBIN_API_KEY
+            }
+        });
+        if (response.ok) {
+            const data = await response.json();
+            sharedStats = data.record?.stats || {};
+        }
+    } catch (error) {
+        console.error('Error fetching stats:', error);
+    }
 }
 
-function saveStats(stats) {
-    localStorage.setItem('milkGameStats', JSON.stringify(stats));
-}
-
-function recordSelection(animal) {
+async function recordSelection(animal) {
     const stats = getStats();
     stats[animal] = (stats[animal] || 0) + 1;
-    saveStats(stats);
+    sharedStats = stats;
+    
+    try {
+        await fetch(JSONBIN_URL, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Master-Key': JSONBIN_API_KEY
+            },
+            body: JSON.stringify({ stats: stats })
+        });
+    } catch (error) {
+        console.error('Error recording selection:', error);
+    }
+}
+
+function getStats() {
+    return sharedStats;
 }
 
 function getPercentages() {
@@ -35,7 +63,8 @@ function getPercentages() {
     return percentages;
 }
 
-function loadWords() {
+async function loadWords() {
+    await fetchStats();
     initializeImages();
 }
 
@@ -61,10 +90,10 @@ function updateWords() {
     document.getElementById('word1').textContent = word1;
 }
 
-function selectImage(index) {
+async function selectImage(index) {
     const selectedAnimal = currentWords[index];
     if (selectedAnimal) {
-        recordSelection(selectedAnimal);
+        await recordSelection(selectedAnimal);
     }
     
     document.querySelectorAll('.image-card').forEach(card => {
@@ -88,7 +117,8 @@ function toggleResults() {
     }
 }
 
-function displayResults() {
+async function displayResults() {
+    await fetchStats();
     const percentages = getPercentages();
     const stats = getStats();
     const total = Object.values(stats).reduce((sum, count) => sum + count, 0);
