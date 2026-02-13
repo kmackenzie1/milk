@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Reset Statistics</title>
+</head>
+<body>
+    <h1>Reset Statistics</h1>
+    <button onclick="resetStats()">Reset All Stats</button>
+    <div id="result"></div>
+
+    <script>
+        const JSONBIN_BIN_ID = '698e8108d0ea881f40b63f14';
+        const JSONBIN_API_KEY = '$2a$10$5nyS7Af5XT/rv29R9G19W.Zr6AGL7neriCUyKiX7uahEy72EAKQZO';
+        const JSONBIN_URL = `https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`;
+
+        async function resetStats() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.textContent = 'Resetting...';
+            
+            try {
+                const response = await fetch(JSONBIN_URL, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Master-Key': JSONBIN_API_KEY
+                    },
+                    body: JSON.stringify({ stats: {} })
+                });
+                
+                if (response.ok) {
+                    resultDiv.textContent = '✓ Stats reset successfully! All statistics have been cleared.';
+                    resultDiv.style.color = 'green';
+                } else {
+                    const errorText = await response.text();
+                    resultDiv.textContent = '✗ Error: ' + response.status + ' - ' + errorText;
+                    resultDiv.style.color = 'red';
+                }
+            } catch (error) {
+                resultDiv.textContent = '✗ Error: ' + error.message;
+                resultDiv.style.color = 'red';
+            }
+        }
+    </script>
+</body>
+</html>
+

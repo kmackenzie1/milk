@@ -28,23 +28,21 @@ async function fetchStats() {
     }
 }
 
-async function recordSelection(animal) {
+function recordSelection(animal) {
     const stats = getStats();
     stats[animal] = (stats[animal] || 0) + 1;
     sharedStats = stats;
     
-    try {
-        await fetch(JSONBIN_URL, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-Master-Key': JSONBIN_API_KEY
-            },
-            body: JSON.stringify({ stats: stats })
-        });
-    } catch (error) {
+    fetch(JSONBIN_URL, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Master-Key': JSONBIN_API_KEY
+        },
+        body: JSON.stringify({ stats: stats })
+    }).catch(error => {
         console.error('Error recording selection:', error);
-    }
+    });
 }
 
 function getStats() {
@@ -63,8 +61,8 @@ function getPercentages() {
     return percentages;
 }
 
-async function loadWords() {
-    await fetchStats();
+function loadWords() {
+    fetchStats();
     initializeImages();
 }
 
@@ -90,10 +88,10 @@ function updateWords() {
     document.getElementById('word1').textContent = word1;
 }
 
-async function selectImage(index) {
+function selectImage(index) {
     const selectedAnimal = currentWords[index];
     if (selectedAnimal) {
-        await recordSelection(selectedAnimal);
+        recordSelection(selectedAnimal);
     }
     
     document.querySelectorAll('.image-card').forEach(card => {
@@ -101,6 +99,12 @@ async function selectImage(index) {
     });
     document.querySelectorAll('.image-card')[index].classList.add('selected');
     updateWords();
+    
+    setTimeout(() => {
+        document.querySelectorAll('.image-card').forEach(card => {
+            card.classList.remove('selected');
+        });
+    }, 500);
 }
 
 function initializeImages() {
