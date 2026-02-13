@@ -62,7 +62,6 @@ function getPercentages() {
 }
 
 function loadWords() {
-    fetchStats();
     initializeImages();
 }
 
@@ -122,12 +121,13 @@ function toggleResults() {
 }
 
 async function displayResults() {
+    const resultsContent = document.getElementById('results-content');
+    resultsContent.innerHTML = '<p>Loading statistics...</p>';
+    
     await fetchStats();
     const percentages = getPercentages();
     const stats = getStats();
     const total = Object.values(stats).reduce((sum, count) => sum + count, 0);
-    
-    const resultsContent = document.getElementById('results-content');
     
     if (total === 0) {
         resultsContent.innerHTML = '<p>No selections recorded yet.</p>';
