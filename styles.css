@@ -1,0 +1,213 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    line-height: 1.6;
+    color: #000;
+    background: #fafafa;
+    min-height: 100vh;
+    padding: 2rem;
+}
+
+.container {
+    max-width: 900px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+h1 {
+    font-size: 3.5rem;
+    font-weight: bold;
+    color: #000;
+    margin-bottom: 1.5rem;
+    line-height: 1.2;
+    text-align: left;
+}
+
+.instruction {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 1rem;
+    color: #000;
+    margin-bottom: 2.5rem;
+    text-align: left;
+    line-height: 1.6;
+}
+
+.image-selection {
+    display: flex;
+    justify-content: center;
+    gap: 4rem;
+    margin: 2rem 0 3rem;
+    align-items: flex-start;
+}
+
+.image-card {
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: opacity 0.2s;
+}
+
+.image-card.selected {
+    opacity: 0.7;
+}
+
+.selectable-image {
+    width: 200px;
+    height: auto;
+    object-fit: contain;
+    margin-bottom: 0.5rem;
+}
+
+.word-display {
+    font-size: 1rem;
+    color: #8b4513;
+    min-height: 1.5rem;
+    text-align: center;
+    border-top: 1px solid #8b4513;
+    padding-top: 0.5rem;
+    width: 200px;
+}
+
+.footer-text {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.9rem;
+    color: #000;
+    text-align: left;
+    margin-top: 3rem;
+}
+
+.link {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.results {
+    margin-top: 3rem;
+    padding: 2rem;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.results h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: #000;
+}
+
+.chart-container {
+    margin-top: 1rem;
+    overflow-x: auto;
+    width: 100%;
+}
+
+.chart-bars {
+    min-width: 700px;
+}
+
+.chart-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    color: #000;
+}
+
+.chart-axis-label {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 0.5rem;
+    text-align: right;
+    padding-right: 120px;
+}
+
+.chart-scale {
+    display: flex;
+    justify-content: space-between;
+    padding-left: 120px;
+    margin-bottom: 0.5rem;
+    font-size: 0.75rem;
+    color: #666;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 0.25rem;
+}
+
+.scale-mark {
+    flex: 1;
+    text-align: center;
+}
+
+.chart-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.bar-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    min-height: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.bar-label {
+    width: 120px;
+    flex-shrink: 0;
+    font-size: 0.9rem;
+    text-align: right;
+    color: #000;
+    padding-right: 1rem;
+}
+
+.bar-wrapper {
+    flex: 1;
+    position: relative;
+    height: 1.5rem;
+    background: #f0f0f0;
+    min-width: 0;
+}
+
+.bar {
+    height: 100%;
+    background: #d4a574;
+    position: relative;
+    min-width: 2px;
+    transition: width 0.3s ease;
+}
+
+.bar-value {
+    position: absolute;
+    right: -3.5rem;
+    font-size: 0.85rem;
+    color: #000;
+    font-weight: 500;
+    white-space: nowrap;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+@media (max-width: 768px) {
+    h1 {
+        font-size: 2.5rem;
+    }
+    
+    .image-selection {
+        flex-direction: column;
+        gap: 2rem;
+        align-items: center;
+    }
+    
+    .selectable-image {
+        width: 150px;
+    }
+    
+    .word-display {
+        width: 150px;
+    }
+}

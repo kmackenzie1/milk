@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Would you like a glass of milk?</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <main class="container">
+        <h1>Would you like a glass of milk?</h1>
+        <p class="instruction">In front of you are two small glasses of milk, each from a different mammal. You must drink one of the glasses of milk. Which do you choose?</p>
+        <div class="image-selection">
+            <div class="image-card" onclick="selectImage(0)">
+                <img id="image0" src="img.jpg" alt="Glass of milk" class="selectable-image">
+                <div class="word-display" id="word0"></div>
+            </div>
+            <div class="image-card" onclick="selectImage(1)">
+                <img id="image1" src="img.jpg" alt="Glass of milk" class="selectable-image">
+                <div class="word-display" id="word1"></div>
+            </div>
+        </div>
+        <p class="footer-text">Done drinking milk? <span class="link" onclick="toggleResults()">See what everyone else thinks.</span></p>
+        <div id="results" class="results" style="display: none;">
+            <h2>Selection Statistics</h2>
+            <div id="results-content"></div>
+        </div>
+    </main>
+    <script src="script.js"></script>
+</body>
+</html>
